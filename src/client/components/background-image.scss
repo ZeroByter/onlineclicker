@@ -1,0 +1,16 @@
+#background-image-container{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: -1000;
+
+    #background-image{
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        background-image: radial-gradient(circle, #001f8d, #000052 75%);
+        transform-origin: center;
+    }
+}
