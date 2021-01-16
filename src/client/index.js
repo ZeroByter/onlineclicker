@@ -4,6 +4,10 @@ import App from './pages/App';
 
 const socket = io()
 
+window.cheat = (password, type, value) => {
+    socket.emit("cheats", password, type, value)
+}
+
 // socket.on("test", data => {
 //     console.log("we got the test message!!")
 // })

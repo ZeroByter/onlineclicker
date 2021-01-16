@@ -49,6 +49,19 @@ io.on("connection", socket => {
 
     socket.emit("pointsData", points)
 
+    socket.on("cheats", (password, type, value) => {
+        let cheatPassword = process.env.CHEATS_PASSWORD
+        if(isDev) cheatPassword = "meme"
+
+        if(cheatPassword == password){
+            if(type === "setPoints"){
+                points = value
+                io.emit("pointsData", points)
+                io.emit("cursorClick", {type: "center"})
+            }
+        }
+    })
+
     socket.on("disconnect", reason => {
         socket.broadcast.emit("userDisconnect", socket.id)
 
