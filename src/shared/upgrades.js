@@ -2,30 +2,39 @@ exports.allUpgrades = {
     "clickers": {
         name: "clickers",
         getPointsPerSecond: upgradeCount => {
-            return +(0.15 * (upgradeCount) * 0.8).toFixed(2)
+            return 0.15 * (upgradeCount) * 0.8
         },
         getPrice: upgradeCount => {
-            return Math.round(+(100 * Math.pow(upgradeCount + 1, 1.1)).toFixed(2))
+            return 100 * Math.pow(upgradeCount + 1, 1.1)
         },
     },
     "clickersv2": {
         name: "clickers v2",
         getPointsPerSecond: upgradeCount => {
-            return +(0.3 * (upgradeCount) * 1.05).toFixed(2)
+            return 0.3 * (upgradeCount) * 1.05
         },
         getPrice: upgradeCount => {
-            return Math.round(+(120 * Math.pow(upgradeCount + 1, 1.1)).toFixed(2))
+            return 120 * Math.pow(upgradeCount + 1, 1.1)
         },
     },
     "clickerbot": {
         name: "Clicker Bot",
         getPointsPerSecond: upgradeCount => {
-            return +Math.pow(1 * upgradeCount, 1.2).toFixed(2)
+            return Math.pow(1 * upgradeCount, 1.2)
         },
         getPrice: upgradeCount => {
             return Math.pow(100 * (upgradeCount + 1), 0.85)
         },
-    }
+    },
+    "poop": {
+        name: "💩 poop 💩",
+        getPointsPerSecond: upgradeCount => {
+            return 0.1 * upgradeCount
+        },
+        getPrice: upgradeCount => {
+            return 5000 + Math.pow(upgradeCount, 1.25)
+        },
+    },
 }
 
 exports.getUpgradeCount = (data, id) => {
