@@ -2,10 +2,10 @@ exports.allUpgrades = {
     "clickers": {
         name: "clickers",
         getPointsPerSecond: upgradeCount => {
-            return +(0.1 * (upgradeCount) * 0.8).toFixed(2)
+            return +(0.15 * (upgradeCount) * 0.8).toFixed(2)
         },
         getPrice: upgradeCount => {
-            return Math.round(+(100 * Math.pow(upgradeCount + 1, 1.2)).toFixed(2))
+            return Math.round(+(100 * Math.pow(upgradeCount + 1, 1.1)).toFixed(2))
         },
     },
     "clickersv2": {

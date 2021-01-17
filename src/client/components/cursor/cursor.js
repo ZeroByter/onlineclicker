@@ -11,8 +11,10 @@ export default class Cursor extends React.Component{
 
         return (
             <div className="other-user-cursor-container" style={convertPositionData(this.props.data.position)}>
-                <div className="other-user-cursor-name">{this.props.data.name}</div>
-                <div className="other-user-cursor-points-given">{pointsGiven}</div>
+                <div className="other-user-cursor-info-container">
+                    <div className="other-user-cursor-name">{this.props.data.name}</div>
+                    <div className="other-user-cursor-points-given">{pointsGiven}</div>
+                </div>
                 
                 <img className="cursor-img" src={cursorImage} />
             </div>

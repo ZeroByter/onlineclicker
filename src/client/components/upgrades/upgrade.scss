@@ -7,6 +7,9 @@
     padding: 16px 0px;
     border: 1px solid rgba(255, 255, 255, 0.247);
 }
+.upgrade-container-too-expensive{
+    background: rgba(255,0,0,0.25);
+}
 @media(max-width: 800px){
     .upgrade-container{
         width: 100%;

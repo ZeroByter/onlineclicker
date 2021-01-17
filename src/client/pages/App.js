@@ -181,7 +181,7 @@ export default class App extends React.Component {
 					<div id="points-subtext">+{getPointsPerSecond(this.state.pointsData.upgrades)} points per second</div>
 				</div>
 
-				<UpgradesContainer socket={this.props.socket} upgrades={this.state.pointsData.upgrades} />
+				<UpgradesContainer points={this.state.pointsData.points} socket={this.props.socket} upgrades={this.state.pointsData.upgrades} />
 
 				<div className="todo">
 					<div>todo:</div>

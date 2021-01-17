@@ -3,14 +3,19 @@
     position: fixed;
     color: white;
 
-    .other-user-cursor-name{
-        text-align: center;
-        transform: translateX(calc(45% * -1));
-        max-width: 120px;
-    }
+    .other-user-cursor-info-container{
+        position: absolute;
+        bottom: 35px;
 
-    .other-user-cursor-points-given{
-        text-align: center;
-        transform: translateX(calc(48% * -1));
+        .other-user-cursor-name{
+            text-align: center;
+            transform: translateX(calc(45% * -1));
+            max-width: 120px;
+        }
+
+        .other-user-cursor-points-given{
+            text-align: center;
+            transform: translateX(calc(48% * -1));
+        }
     }
 }

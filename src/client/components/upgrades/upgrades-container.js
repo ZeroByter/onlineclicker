@@ -9,7 +9,7 @@ export default class UpgradesContainer extends React.PureComponent {
         upgrades.push(...Object.entries(allUpgrades).map(entry => {
             let id = entry[0]
             let upgrade = entry[1]
-            return <Upgrade key={id} id={id} socket={this.props.socket} upgrade={upgrade} upgradeCount={getUpgradeCount(this.props.upgrades, id)} />
+            return <Upgrade key={id} id={id} points={this.props.points} socket={this.props.socket} upgrade={upgrade} upgradeCount={getUpgradeCount(this.props.upgrades, id)} />
         }))
 
         return (
