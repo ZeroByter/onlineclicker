@@ -10,7 +10,7 @@ export default class Upgrade extends React.PureComponent {
         return (
             <div className="upgrade-container" onClick={this.handleOnClick}>
                 <div>{this.props.upgrade.name} ({this.props.upgradeCount})</div>
-                <div>{this.props.upgrade.getPointsPerSecond(this.props.upgradeCount)} clicks per second</div>
+                <div>{this.props.upgrade.getPointsPerSecond(this.props.upgradeCount + 1)} clicks per second</div>
                 <div>{this.props.upgrade.getPrice(this.props.upgradeCount)} points</div>
             </div>
         )
