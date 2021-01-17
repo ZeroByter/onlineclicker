@@ -11,9 +11,7 @@ import { Helmet } from 'react-helmet';
 import Cookies from "js-cookie"
 import { getPointsPerSecond } from '../../shared/upgrades';
 
-const todo = [
-	"gotta add upgrades which increase non-linearly in effectiveness/cost"
-]
+const todo = []
 
 function getNewCursorClick(type, position){
 	let obj = {id: randomString(), created: new Date().getTime(), type}

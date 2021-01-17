@@ -55,12 +55,24 @@ let pointsData = {
 let sockets = {}
 
 io.on("connection", socket => {
-    socket[socket.id] = {
+    sockets[socket.id] = {
         socket,
         cursorPosition: null,
         name: "",
         pointsGiven: 0
     }
+
+    Object.entries(sockets).forEach(entry => {
+        let id = entry[0]
+        let alreadyConnectedSocket = entry[1]
+
+        if(socket.id == id) return
+
+        socket.emit("setName", {
+            id: id,
+            newName: alreadyConnectedSocket.name
+        })
+    })
 
     transmitPointsData(socket)
 
@@ -84,7 +96,7 @@ io.on("connection", socket => {
     })
 
     socket.on("cursorMove", data => {
-        socket[socket.id].cursorPosition = data
+        sockets[socket.id].cursorPosition = data
         socket.broadcast.emit("cursorMove", {
             id: socket.id,
             newPosition: data
@@ -92,7 +104,7 @@ io.on("connection", socket => {
     })
 
     socket.on("cursorClick", data => {
-        socket[socket.id].cursorPosition = data
+        sockets[socket.id].cursorPosition = data
         socket.broadcast.emit("cursorClick", {
             type: "normal",
             id: socket.id,
@@ -103,7 +115,7 @@ io.on("connection", socket => {
     socket.on("setName", data => {
         data = data.substring(0, 12)
 
-        socket[socket.id].name = data
+        sockets[socket.id].name = data
         socket.broadcast.emit("setName", {
             id: socket.id,
             newName: data
@@ -112,13 +124,13 @@ io.on("connection", socket => {
 
     socket.on("mainClick", () => {
         pointsData.points += 1
-        socket[socket.id].pointsGiven += 1
+        sockets[socket.id].pointsGiven += 1
 
         transmitPointsData(io)
         socket.broadcast.emit("cursorClick", {
             type: "center",
             id: socket.id,
-            pointsGiven: socket[socket.id].pointsGiven
+            pointsGiven: sockets[socket.id].pointsGiven
         })
     })
 
@@ -127,7 +139,6 @@ io.on("connection", socket => {
             let price = allUpgrades[upgradeId].getPrice(getUpgradeCount(pointsData.upgrades, upgradeId))
             if (pointsData.points >= price) {
                 purchaseUpgrade(pointsData.upgrades, upgradeId)
-                console.log(price)
                 pointsData.points -= price
                 pointsData.points = +pointsData.points.toFixed(4)
                 transmitPointsData(io)
