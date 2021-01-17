@@ -16,6 +16,15 @@ exports.allUpgrades = {
         getPrice: upgradeCount => {
             return Math.round(+(120 * Math.pow(upgradeCount + 1, 1.1)).toFixed(2))
         },
+    },
+    "clickerbot": {
+        name: "Clicker Bot",
+        getPointsPerSecond: upgradeCount => {
+            return +Math.pow(1 * upgradeCount, 1.2).toFixed(2)
+        },
+        getPrice: upgradeCount => {
+            return Math.pow(100 * upgradeCount, 0.75)
+        },
     }
 }
 

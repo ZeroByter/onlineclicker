@@ -1,4 +1,3 @@
-const os = require('os');
 const express = require('express');
 const app = express();
 
@@ -75,6 +74,8 @@ io.on("connection", socket => {
     })
 
     transmitPointsData(socket)
+
+    socket.emit("getId", socket.id)
 
     socket.on("cheats", (password, type, value) => {
         let cheatPassword = process.env.CHEATS_PASSWORD

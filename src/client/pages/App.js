@@ -11,8 +11,6 @@ import { Helmet } from 'react-helmet';
 import Cookies from "js-cookie"
 import { getPointsPerSecond } from '../../shared/upgrades';
 
-const todo = []
-
 function getNewCursorClick(type, position){
 	let obj = {id: randomString(), created: new Date().getTime(), type}
 
@@ -33,6 +31,7 @@ export default class App extends React.Component {
 		cursorClicks: []
 	}
 	handleCleanupInterval = -1
+	handleIncrementPointsInterval = -1
 
 	setPlayerCursorData = (id, position, name, pointsGiven) => {
 		this.setState(oldState => {
@@ -55,6 +54,7 @@ export default class App extends React.Component {
 		window.addEventListener("mousemove", this.handleWindowMouseMove)
 
 		this.handleCleanupInterval = setInterval(this.handleCleanup, 1000)
+		this.handleIncrementPointsInterval = setInterval(this.handleIncrementPoints, 10)
 
 		this.props.socket.on("cursorMove", data => {
 			this.setPlayerCursorData(data.id, data.newPosition, null, null)
@@ -107,6 +107,7 @@ export default class App extends React.Component {
 		window.removeEventListener("mousemove", this.handleWindowMouseMove)
 
 		clearInterval(this.handleCleanupInterval)
+		clearInterval(this.handleIncrementPointsInterval)
 	}
 
 	getMousePositionData = e => {
@@ -141,6 +142,16 @@ export default class App extends React.Component {
 		})
 	}
 
+	handleIncrementPoints = () => {
+		this.setState(oldState => {
+			let pointsData = oldState.pointsData
+
+			pointsData.points += getPointsPerSecond(pointsData.upgrades) / 100
+
+			return {pointsData}
+		})
+	}
+
 	handleClickMeButtonClick = e => {
 		this.setState(oldState => {
 			oldState.pointsData.points = oldState.pointsData.points + 1
@@ -157,10 +168,6 @@ export default class App extends React.Component {
 		})
 		let cursorClicks = this.state.cursorClicks.map(click => {
 			return <CursorClick key={click.id} click={click} />
-		})
-
-		let todoElements = todo.map(todo => {
-			return <div key={todo}>- {todo}</div>
 		})
 
 		return (
@@ -180,11 +187,6 @@ export default class App extends React.Component {
 				</div>
 
 				<UpgradesContainer points={this.state.pointsData.points} socket={this.props.socket} upgrades={this.state.pointsData.upgrades} />
-
-				<div className="todo">
-					<div>todo:</div>
-					{todoElements}
-				</div>
 
 				{cursors}
 				{cursorClicks}
