@@ -23,7 +23,7 @@ exports.allUpgrades = {
             return +Math.pow(1 * upgradeCount, 1.2).toFixed(2)
         },
         getPrice: upgradeCount => {
-            return Math.pow(100 * upgradeCount, 0.75)
+            return Math.pow(100 * (upgradeCount + 1), 0.85)
         },
     }
 }
