@@ -183,7 +183,7 @@ export default class App extends React.Component {
 				<ClickMeButton socket={this.props.socket} onClick={this.handleClickMeButtonClick} />
 				<div id="points-text-container">
 					<div id="points-text">{numberWithCommas(Math.round(this.state.pointsData.points))} points</div>
-					<div id="points-subtext">+{getPointsPerSecond(this.state.pointsData.upgrades)} points per second</div>
+					<div id="points-subtext">+{getPointsPerSecond(+this.state.pointsData.upgrades.toFixed(4))} points per second</div>
 				</div>
 
 				<UpgradesContainer points={this.state.pointsData.points} socket={this.props.socket} upgrades={this.state.pointsData.upgrades} />

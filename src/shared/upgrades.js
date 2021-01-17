@@ -1,4 +1,13 @@
 exports.allUpgrades = {
+    "trash": {
+        name: "Trash Clicker",
+        getPointsPerSecond: upgradeCount => {
+            return upgradeCount / 10
+        },
+        getPrice: upgradeCount => {
+            return 15 + Math.pow(upgradeCount * 3, 0.85)
+        }
+    },
     "clickers": {
         name: "clickers",
         getPointsPerSecond: upgradeCount => {
@@ -23,7 +32,7 @@ exports.allUpgrades = {
             return Math.pow(1 * upgradeCount, 1.2)
         },
         getPrice: upgradeCount => {
-            return Math.pow(100 * (upgradeCount + 1), 0.85)
+            return Math.pow(Math.pow(upgradeCount, upgradeCount), 0.002) * 100
         },
     },
     "poop": {

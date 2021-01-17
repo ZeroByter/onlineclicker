@@ -86,6 +86,18 @@ io.on("connection", socket => {
                 pointsData.points = value
                 transmitPointsData(io)
                 io.emit("cursorClick", { type: "center" })
+            } else if (type === "setUpgrade") {
+                let data = value.split("=")
+                let id = data[0]
+                let value = parseFloat(data[1])
+                pointsData.upgrades[id].count = value
+                transmitPointsData(io)
+            } else if (type === "clearPointsData") {
+                pointsData = {
+                    points: 0,
+                    upgrades: {}
+                }
+                transmitPointsData(io)
             }
         }
     })
