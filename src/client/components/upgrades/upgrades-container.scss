@@ -1,0 +1,18 @@
+.upgrades-container{
+    color: white;
+    position: fixed;
+    height: 75%;
+    min-height: 300px;
+    top: calc(50% - 75% / 2);
+    left: calc(50% - 200px / 2 + 55% / 2);
+    overflow: auto;
+}
+@media(max-width: 800px){
+    .upgrades-container{
+        top: 75%;
+        min-height: unset;
+        height: calc(100% - 75%);
+        left: 0px;
+        width: 100%;
+    }
+}

@@ -1,0 +1,23 @@
+.upgrade-container{
+    cursor: pointer;
+    width: 200px;
+    background: rgba(0,0,0,0.25);
+    transition: background 0.1s;
+    text-align: center;
+    padding: 16px 0px;
+    border: 1px solid rgba(255, 255, 255, 0.247);
+}
+@media(max-width: 800px){
+    .upgrade-container{
+        width: 100%;
+    }
+}
+.upgrade-container:not(:first-child){
+    border-top: none;
+}
+.upgrade-container:hover{
+    background: rgba(40,40,40,0.275);
+}
+.upgrade-container:active{
+    background: rgba(80,80,80,0.3);
+}

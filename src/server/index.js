@@ -4,7 +4,8 @@ const app = express();
 
 const http = require("http").Server(app)
 const io = require("socket.io")(http)
-const mysql = require("mysql")
+const mysql = require("mysql");
+const { purchaseUpgrade, allUpgrades, getUpgradeCount, getPointsPerSecond } = require('../shared/upgrades');
 
 const isDev = process.env.NODE_ENV !== "production"
 
@@ -14,7 +15,7 @@ app.use(express.static('dist'));
 //app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));
 
 let connectionData = process.env.JAWSDB_URL
-if(isDev) connectionData = {
+if (isDev) connectionData = {
     host: "localhost",
     user: "root",
     password: "",
@@ -25,19 +26,31 @@ var connection = mysql.createConnection(connectionData)
 
 connection.connect()
 
-connection.query("SELECT data FROM maindata WHERE id='points'", (error, results, fields) => {
-    if(error) throw error
-    
-    points = parseInt(results[0].data)
+connection.query("SELECT data FROM pointsdata WHERE id='pointsdata'", (error, results, fields) => {
+    if (error) throw error
+
+    pointsData = JSON.parse(results[0].data)
 })
 
 setInterval(() => {
-    connection.query("UPDATE maindata SET data=? WHERE id='points'", [points], (error, results, fields) => {
-        if(error) throw error
+    connection.query("UPDATE pointsdata SET data=? WHERE id='pointsdata'", [JSON.stringify(pointsData)], (error, results, fields) => {
+        if (error) throw error
     })
 }, 1000 * 30)
 
-let points = 0
+const transmitPointsData = target => {
+    target.emit("pointsData", pointsData)
+}
+
+setInterval(() => {
+    pointsData.points += getPointsPerSecond(pointsData.upgrades)
+    transmitPointsData(io)
+}, 1000)
+
+let pointsData = {
+    points: 0,
+    upgrades: {}
+}
 
 let sockets = {}
 
@@ -45,19 +58,21 @@ io.on("connection", socket => {
     socket[socket.id] = {
         socket,
         cursorPosition: null,
+        name: "",
+        pointsGiven: 0
     }
 
-    socket.emit("pointsData", points)
+    transmitPointsData(socket)
 
     socket.on("cheats", (password, type, value) => {
         let cheatPassword = process.env.CHEATS_PASSWORD
-        if(isDev) cheatPassword = "meme"
+        if (isDev) cheatPassword = "meme"
 
-        if(cheatPassword == password){
-            if(type === "setPoints"){
-                points = value
-                io.emit("pointsData", points)
-                io.emit("cursorClick", {type: "center"})
+        if (cheatPassword == password) {
+            if (type === "setPoints") {
+                pointsData.points = value
+                transmitPointsData(io)
+                io.emit("cursorClick", { type: "center" })
             }
         }
     })
@@ -85,10 +100,39 @@ io.on("connection", socket => {
         })
     })
 
+    socket.on("setName", data => {
+        data = data.substring(0, 12)
+
+        socket[socket.id].name = data
+        socket.broadcast.emit("setName", {
+            id: socket.id,
+            newName: data
+        })
+    })
+
     socket.on("mainClick", () => {
-        points += 1
-        io.emit("pointsData", points)
-        socket.broadcast.emit("cursorClick", {type: "center"})
+        pointsData.points += 1
+        socket[socket.id].pointsGiven += 1
+
+        transmitPointsData(io)
+        socket.broadcast.emit("cursorClick", {
+            type: "center",
+            id: socket.id,
+            pointsGiven: socket[socket.id].pointsGiven
+        })
+    })
+
+    socket.on("purchaseUpgrade", upgradeId => {
+        if (upgradeId in allUpgrades) {
+            let price = allUpgrades[upgradeId].getPrice(getUpgradeCount(pointsData.upgrades, upgradeId))
+            if (pointsData.points >= price) {
+                purchaseUpgrade(pointsData.upgrades, upgradeId)
+                console.log(price)
+                pointsData.points -= price
+                pointsData.points = +pointsData.points.toFixed(4)
+                transmitPointsData(io)
+            }
+        }
     })
 })
 
